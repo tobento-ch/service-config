@@ -218,6 +218,15 @@ class ConfigTest extends TestCase
         $config->get('sitename');      
     }
     
+    public function testGetMethodWithLocaleThrowsConfigNotFoundException()
+    {
+        $this->expectException(ConfigNotFoundException::class);
+        
+        $config = new Config(new Translations());
+        $config->set('sitename', null, 'de');
+        $config->get('sitename', null, 'fr');
+    }
+    
     public function testGetMethodDoesNotThrowsConfigNotFoundExceptionWithDefaultValue()
     {    
         $config = new Config(new Translations());
@@ -299,5 +308,24 @@ class ConfigTest extends TestCase
             'Site It',
             $config->get(key: 'sitename', default: 'Site It', locale: 'it')
         );        
-    }    
+    }
+    
+    public function testGetMethodWithNullValueSet()
+    {        
+        $config = new Config(new Translations());
+        $config->set('sitename', null);
+        
+        $this->assertSame(
+            null,
+            $config->get('sitename')
+        );         
+    }
+    
+    public function testGetMethodWithLocaleNullValueSet()
+    {        
+        $config = new Config(new Translations());
+        $config->set('sitename', null, 'de');
+        
+        $this->assertSame(null, $config->get('sitename', null, 'de'));
+    }
 }

@@ -117,9 +117,11 @@ class Config implements ConfigInterface
     public function get(string $key, mixed $default = null, null|int|string|array $locale = null): mixed
     {        
         $data = $this->data->get($key, $default, $locale);
-
-        if ($data === null && $locale === null)
-        {
+        
+        if (
+            $data === null
+            && ! $this->data->has($key, $locale)
+        ) {
             throw new ConfigNotFoundException(
                 $key,
                 'Config "'.$key.'" not found! Set a default value or set the data first.'

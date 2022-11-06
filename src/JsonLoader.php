@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Tobento\Service\Config;
 
 use Tobento\Service\Dir\DirsInterface;
+use Tobento\Service\Dir\DirInterface;
 use Tobento\Service\Filesystem\JsonFile;
 
 /**
@@ -52,7 +53,7 @@ class JsonLoader implements LoaderInterface
         foreach($this->dirs->all() as $dir)
         {
             try {
-                return $this->loadFile($dir->dir().$file);
+                return $this->loadFile($dir, $file);
             } catch (ConfigLoadException $e) {
                 continue;
             }
@@ -67,15 +68,24 @@ class JsonLoader implements LoaderInterface
     /**
      * Load the file.
      *
+     * @param DirInterface $dir
      * @param string $file The file.
      * @return array The data parsed.
      * @throws ConfigLoadException
      */    
-    protected function loadFile(string $file): array
+    protected function loadFile(DirInterface $dir, string $file): array
     {
-        $file = new JsonFile($file);
+        $file = new JsonFile($dir->dir().$file);
         
-        if (! $file->isJson())
+        if (!$file->isWithinDir($dir->dir()))
+        {
+            throw new ConfigLoadException(
+                $file->getFile(),
+                'Json config file "'.$file->getFile().'" is not within dir "'.$dir->dir().'"!'
+            );
+        }
+        
+        if (!$file->isJson())
         {
             throw new ConfigLoadException(
                 $file->getFile(),

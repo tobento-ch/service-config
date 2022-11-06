@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Tobento\Service\Config;
 
 use Tobento\Service\Dir\DirsInterface;
+use Tobento\Service\Dir\DirInterface;
+use Tobento\Service\Filesystem\File;
 
 /**
  * PhpLoader
@@ -51,7 +53,7 @@ class PhpLoader implements LoaderInterface
         foreach($this->dirs->all() as $dir)
         {
             try {
-                return $this->loadFile($dir->dir().$file);
+                return $this->loadFile($dir, $file);
             } catch (ConfigLoadException $e) {
                 continue;
             }
@@ -66,28 +68,39 @@ class PhpLoader implements LoaderInterface
     /**
      * Load the file.
      *
+     * @param DirInterface $dir
      * @param string $file The file.
      * @return array The data parsed.
      * @throws ConfigLoadException
      */    
-    protected function loadFile(string $file): array
-    {        
-        if (! file_exists($file))
+    protected function loadFile(DirInterface $dir, string $file): array
+    {
+        $file = new File($dir->dir().$file);
+        
+        if (!$file->isWithinDir($dir->dir()))
         {
             throw new ConfigLoadException(
-                $file,
-                'Php config file "'.$file.'" not found!'
+                $file->getFile(),
+                'Php config file "'.$file->getFile().'" is not within dir "'.$dir->dir().'"!'
             );
         }
         
-        $fileData = require $file;
+        if (!$file->isFile())
+        {
+            throw new ConfigLoadException(
+                $file->getFile(),
+                'Php config file "'.$file->getFile().'" not found!'
+            );
+        }
+        
+        $fileData = require $file->getFile();
 
         // Check for array and empty.
         if (!$fileData || !is_array($fileData))
         {
             throw new ConfigLoadException(
-                $file,
-                'Php config file "'.$file.'" must return an array!'
+                $file->getFile(),
+                'Php config file "'.$file->getFile().'" must return an array!'
             );
         }
         

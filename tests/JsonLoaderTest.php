@@ -101,5 +101,16 @@ class JsonLoaderTest extends TestCase
             [],
             $loader->load('invalid.json')
         ); 
+    }
+    
+    public function testLoadMethodThrowsConfigLoadExceptionIfFileIsNotWithinDir()
+    {
+        $this->expectException(ConfigLoadException::class);
+        
+        $loader = new JsonLoader(
+            (new Dirs())->dir(__DIR__.'/config/de')
+        );
+
+        $loader->load('../app.json');
     }    
 }

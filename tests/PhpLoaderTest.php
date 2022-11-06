@@ -100,5 +100,16 @@ class PhpLoaderTest extends TestCase
         );
         
         $loader->load('invalid.php');      
-    }    
+    }
+    
+    public function testLoadMethodThrowsConfigLoadExceptionIfFileIsNotWithinDir()
+    {
+        $this->expectException(ConfigLoadException::class);
+        
+        $loader = new PhpLoader(
+            (new Dirs())->dir(__DIR__.'/config/de')
+        );
+        
+        $loader->load('../app.php');
+    }
 }

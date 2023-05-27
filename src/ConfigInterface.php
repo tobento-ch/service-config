@@ -68,4 +68,13 @@ interface ConfigInterface
      * throws ConfigNotFoundException
      */
     public function get(string $key, mixed $default = null, null|int|string|array $locale = null): mixed;
+    
+    /**
+     * Returns true if config exists, otherwise false.
+     * 
+     * @param string $key The key.
+     * @param null|string|int|array $locale The locale
+     * @return bool
+     */
+    public function has(string $key, null|int|string|array $locale = null): bool;
 }

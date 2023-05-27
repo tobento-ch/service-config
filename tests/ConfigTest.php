@@ -328,4 +328,18 @@ class ConfigTest extends TestCase
         
         $this->assertSame(null, $config->get('sitename', null, 'de'));
     }
+    
+    public function testHasMethod()
+    {        
+        $config = new Config(new Translations());
+        
+        $config->set('name', 'Foo');
+        $config->set('site.name', 'Tobento');
+
+        $this->assertTrue($config->has('name'));
+        $this->assertTrue($config->has('site'));
+        $this->assertTrue($config->has('site.name'));
+        $this->assertFalse($config->has('site.foo'));
+        $this->assertFalse($config->has('foo'));
+    }
 }

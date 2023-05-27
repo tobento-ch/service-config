@@ -281,7 +281,7 @@ class ConfigTest extends TestCase
         ); 
     }
     
-    public function testGetMethodWitLocale()
+    public function testGetMethodWithLocale()
     {        
         $config = new Config(new Translations());
         $config->set('sitename', 'Sitename');
@@ -341,5 +341,17 @@ class ConfigTest extends TestCase
         $this->assertTrue($config->has('site.name'));
         $this->assertFalse($config->has('site.foo'));
         $this->assertFalse($config->has('foo'));
+    }
+    
+    public function testHasMethodWithLocale()
+    {        
+        $config = new Config(new Translations());
+        
+        $config->set('sitename', 'Sitename');
+        $config->set('sitename', 'Seitenname', 'de');
+
+        $this->assertTrue($config->has('sitename'));
+        $this->assertTrue($config->has('sitename', 'de'));
+        $this->assertFalse($config->has('sitename', 'fr'));
     }
 }

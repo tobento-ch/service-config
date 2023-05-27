@@ -15,6 +15,7 @@ The Config Service provides a way for managing configuration data in an applicat
         - [PHP Loader](#php-loader)
         - [JSON Loader](#json-loader)
     - [Get Data](#get-data)
+    - [Has Data](#has-data)
     - [Translations](#translations)
 - [Credits](#credits)
 ___
@@ -253,6 +254,30 @@ $sites = $config->get('sites', ['first', 'second']);
 
 // returns the value set as the same data type:
 $sites = $config->get('sites', 'Default Sites');
+```
+
+## Has Data
+
+```php
+use Tobento\Service\Config\Config;
+use Tobento\Service\Collection\Translations;
+
+$config = new Config(new Translations());
+
+$config->set('sitename', 'A sitename');
+$config->set('app.name', 'An app name');
+$config->set('app.name', 'App Name', 'de');
+
+var_dump($config->has('sitename'));
+// bool(true)
+
+// using dot notation:
+var_dump($config->has('app.name'));
+// bool(true)
+
+// translated:
+var_dump($config->has('app.name', 'de'));
+// bool(true)
 ```
 
 ## Translations

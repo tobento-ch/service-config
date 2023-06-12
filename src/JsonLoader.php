@@ -45,10 +45,10 @@ class JsonLoader implements LoaderInterface
      * Load the data.
      *
      * @param string $file The file.
-     * @return array The data parsed.
+     * @return DataInterface The loaded data.
      * @throws ConfigLoadException
      */    
-    public function load(string $file): array
+    public function load(string $file): DataInterface
     {
         foreach($this->dirs->all() as $dir)
         {
@@ -70,10 +70,10 @@ class JsonLoader implements LoaderInterface
      *
      * @param DirInterface $dir
      * @param string $file The file.
-     * @return array The data parsed.
+     * @return DataInterface
      * @throws ConfigLoadException
      */    
-    protected function loadFile(DirInterface $dir, string $file): array
+    protected function loadFile(DirInterface $dir, string $file): DataInterface
     {
         $file = new JsonFile($dir->dir().$file);
         
@@ -93,6 +93,6 @@ class JsonLoader implements LoaderInterface
             );
         }
         
-        return $file->toArray();
+        return new Data(data: $file->toArray(), file: $file->getFile());
     }
 }

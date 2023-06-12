@@ -45,10 +45,10 @@ class PhpLoader implements LoaderInterface
      * Load the data.
      *
      * @param string $file The file.
-     * @return array The data parsed.
+     * @return DataInterface The loaded data.
      * @throws ConfigLoadException
      */    
-    public function load(string $file): array
+    public function load(string $file): DataInterface
     {
         foreach($this->dirs->all() as $dir)
         {
@@ -70,10 +70,10 @@ class PhpLoader implements LoaderInterface
      *
      * @param DirInterface $dir
      * @param string $file The file.
-     * @return array The data parsed.
+     * @return DataInterface
      * @throws ConfigLoadException
      */    
-    protected function loadFile(DirInterface $dir, string $file): array
+    protected function loadFile(DirInterface $dir, string $file): DataInterface
     {
         $file = new File($dir->dir().$file);
         
@@ -104,6 +104,6 @@ class PhpLoader implements LoaderInterface
             );
         }
         
-        return $fileData;
+        return new Data(data: $fileData, file: $file->getFile());
     }
 }

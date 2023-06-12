@@ -16,6 +16,7 @@ namespace Tobento\Service\Config\Test;
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Config\Config;
 use Tobento\Service\Config\ConfigInterface;
+use Tobento\Service\Config\DataInterface;
 use Tobento\Service\Config\PhpLoader;
 use Tobento\Service\Config\ConfigLoadException;
 use Tobento\Service\Config\ConfigNotFoundException;
@@ -147,7 +148,31 @@ class ConfigTest extends TestCase
         $config = new Config(new Translations());
         
         $config->load('app.php', 'app');
-    }    
+    }
+    
+    public function testDataMethod()
+    {
+        $config = new Config(new Translations());
+        
+        $loader = new PhpLoader(
+            (new Dirs())->dir(__DIR__.'/config')
+        );
+        
+        $config->addLoader($loader);
+
+        $this->assertInstanceof(
+            DataInterface::class,
+            $config->data('app.php')
+        );
+        
+        $this->assertSame(
+            [
+                'name' => 'Tobento',
+                'author' => 'Tobias',
+            ],
+            $config->data('app.php')->data()
+        );
+    }
     
     public function testSetMethod()
     {

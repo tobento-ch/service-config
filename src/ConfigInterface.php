@@ -46,6 +46,15 @@ interface ConfigInterface
     public function load(string $file, null|string $key = null, null|int|string $locale = null): array;
 
     /**
+     * Returns the data for the specified file.
+     *
+     * @param string $file
+     * @return DataInterface
+     * @throws ConfigLoadException
+     */
+    public function data(string $file): DataInterface;
+    
+    /**
      * Set a value by key.
      * 
      * @param string $key The key.

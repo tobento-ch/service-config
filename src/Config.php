@@ -78,13 +78,34 @@ class Config implements ConfigInterface
             );
         }
         
-        $data = $loader->load($file);
+        $data = $loader->load($file)->data();
         
         if ($key) {
             $this->set($key, $data, $locale);
         }
         
         return $data;
+    }
+    
+    /**
+     * Returns the data for the specified file.
+     *
+     * @param string $file
+     * @return DataInterface
+     * @throws ConfigLoadException
+     */
+    public function data(string $file): DataInterface
+    {
+        $fileExtension = $this->getFileExtension($file);
+        
+        if (is_null($loader = $this->loader($fileExtension))) {
+            throw new ConfigLoadException(
+                $file,
+                'Unable to load config file as unsupported file extension!'
+            );
+        }
+        
+        return $loader->load($file);
     }
 
     /**

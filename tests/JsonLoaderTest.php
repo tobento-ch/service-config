@@ -15,6 +15,7 @@ namespace Tobento\Service\Config\Test;
 
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Config\LoaderInterface;
+use Tobento\Service\Config\DataInterface;
 use Tobento\Service\Config\JsonLoader;
 use Tobento\Service\Config\ConfigLoadException;
 use Tobento\Service\Dir\Dirs;
@@ -50,16 +51,22 @@ class JsonLoaderTest extends TestCase
     
     public function testLoadMethod()
     {
-        $loader = new JsonLoader(
-            (new Dirs())->dir(__DIR__.'/config')
-        );
+        $dirs = (new Dirs())->dir(__DIR__.'/config', 'config');
+        
+        $loader = new JsonLoader($dirs);
+        
+        $data = $loader->load('app.json');
+        
+        $this->assertInstanceOf(DataInterface::class, $data);
+        
+        $this->assertSame($dirs->get('config').'app.json', $data->file());
         
         $this->assertSame(
             [
                 'name' => 'Tobento',
                 'author' => 'Tobias',
             ],
-            $loader->load('app.json')
+            $data->data()
         );        
     }
     
@@ -76,7 +83,7 @@ class JsonLoaderTest extends TestCase
                 'name' => 'Tobento Dev',
                 'author' => 'Tobias',
             ],
-            $loader->load('app.json')
+            $loader->load('app.json')->data()
         );        
     }
     
@@ -99,7 +106,7 @@ class JsonLoaderTest extends TestCase
 
         $this->assertSame(
             [],
-            $loader->load('invalid.json')
+            $loader->load('invalid.json')->data()
         ); 
     }
     

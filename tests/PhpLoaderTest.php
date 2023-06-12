@@ -15,6 +15,7 @@ namespace Tobento\Service\Config\Test;
 
 use PHPUnit\Framework\TestCase;
 use Tobento\Service\Config\LoaderInterface;
+use Tobento\Service\Config\DataInterface;
 use Tobento\Service\Config\PhpLoader;
 use Tobento\Service\Config\ConfigLoadException;
 use Tobento\Service\Dir\Dirs;
@@ -50,16 +51,22 @@ class PhpLoaderTest extends TestCase
     
     public function testLoadMethod()
     {
-        $loader = new PhpLoader(
-            (new Dirs())->dir(__DIR__.'/config')
-        );
+        $dirs = (new Dirs())->dir(__DIR__.'/config', 'config');
+        
+        $loader = new PhpLoader($dirs);
+        
+        $data = $loader->load('app.php');
+        
+        $this->assertInstanceOf(DataInterface::class, $data);
+        
+        $this->assertSame($dirs->get('config').'app.php', $data->file());
         
         $this->assertSame(
             [
                 'name' => 'Tobento',
                 'author' => 'Tobias',
             ],
-            $loader->load('app.php')
+            $data->data()
         );        
     }
     
@@ -76,7 +83,7 @@ class PhpLoaderTest extends TestCase
                 'name' => 'Tobento Dev',
                 'author' => 'Tobias',
             ],
-            $loader->load('app.php')
+            $loader->load('app.php')->data()
         );        
     }
     

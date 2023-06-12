@@ -22,7 +22,7 @@
     "require": {
         "php": ">=8.0",
         "tobento/service-collection": "^1.0",
-        "tobento/service-filesystem": "^1.0",
+        "tobento/service-filesystem": "^1.0.5",
         "tobento/service-dir": "^1.0"
     },
     "require-dev": {

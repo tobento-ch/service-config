@@ -29,8 +29,8 @@ interface LoaderInterface
      * Load the data.
      *
      * @param string $file The file.
-     * @return array The data parsed.
+     * @return DataInterface The loaded data.
      * @throws ConfigLoadException
      */    
-    public function load(string $file): array;
+    public function load(string $file): DataInterface;
 }

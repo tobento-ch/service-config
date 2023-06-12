@@ -165,6 +165,7 @@ You may omit the **key:** to load data without storing.
 ```php
 use Tobento\Service\Config\Config;
 use Tobento\Service\Config\PhpLoader;
+use Tobento\Service\Config\DataInterface;
 use Tobento\Service\Collection\Translations;
 use Tobento\Service\Dir\Dirs;
 
@@ -178,6 +179,15 @@ $config->addLoader(new PhpLoader($dirs));
 
 // just loading data:
 $data = $config->load(file: 'database.php');
+
+var_dump($data);
+// array(3) { ... }
+
+// or by the data method:
+$data = $config->data(file: 'database.php');
+
+var_dump($data instanceof DataInterface);
+// bool(true)
 ```
 
 

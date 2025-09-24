@@ -30,7 +30,7 @@ composer require tobento/service-config
 
 ## Requirements
 
-- PHP 8.0 or greater
+- PHP 8.4 or greater
 
 ## Highlights
 
@@ -141,7 +141,7 @@ use Tobento\Service\Dir\Dirs;
 $config = new Config(new Translations());
 
 // add loader:
-$dirs = (new Dirs())->dir('home/private/config');
+$dirs = new Dirs()->dir('home/private/config');
 
 $config->addLoader(new PhpLoader($dirs));
 
@@ -173,7 +173,7 @@ use Tobento\Service\Dir\Dirs;
 $config = new Config(new Translations());
 
 // add loader:
-$dirs = (new Dirs())->dir('home/private/config');
+$dirs = new Dirs()->dir('home/private/config');
 
 $config->addLoader(new PhpLoader($dirs));
 
@@ -205,7 +205,7 @@ use Tobento\Service\Dir\Dirs;
 $config = new Config(new Translations());
 
 // add loader:
-$dirs = (new Dirs())->dir('home/private/config');
+$dirs = new Dirs()->dir('home/private/config');
 
 $config->addLoader(new JsonLoader($dirs));
 
@@ -336,7 +336,7 @@ use Tobento\Service\Dir\Dirs;
 $config = new Config(new Translations());
 
 // add loader:
-$dirs = (new Dirs())->dir('home/private/config');
+$dirs = new Dirs()->dir('home/private/config');
 
 $config->addLoader(new PhpLoader($dirs));
 

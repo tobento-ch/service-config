@@ -52,7 +52,7 @@ use Tobento\Service\Dir\Dirs;
 $config = new Config(new Translations());
 
 // adding a loader:
-$dirs = (new Dirs())->dir('home/private/config');
+$dirs = new Dirs()->dir('home/private/config');
 
 $config->addLoader(new PhpLoader($dirs));
 
